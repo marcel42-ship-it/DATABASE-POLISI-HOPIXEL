@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Personel Polri | Hopixel RP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+      body {
+        background: #020617;
+        background-image: radial-gradient(circle at top right, #064e3b 0%, #020617 100%);
+        color: #f8fafc;
+        font-family: 'Inter', sans-serif;
+      }
+      .glass {
+        background: rgba(6, 78, 59, 0.2);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+      }
+      .hidden { display: none; }
+      input, select, textarea {
+        background: #061f1a !important;
+        border: 1px solid #065f46 !important;
+        color: white !important;
+        outline: none;
+        transition: all 0.2s;
+      }
+      input:focus, select:focus, textarea:focus { 
+        border-color: #10b981 !important; 
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); 
+      }
+      .tab-active { border-bottom: 3px solid #10b981; color: #10b981; background: rgba(16, 185, 129, 0.1); }
+      .tab-izin-active { border-bottom: 3px solid #facc15; color: #facc15; background: rgba(250, 204, 21, 0.1); }
+      .tab-dpo-active { border-bottom: 3px solid #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+      
+      .dot-online { 
+        height: 8px; width: 8px; border-radius: 50%; display: inline-block; 
+        background-color: #bef264; box-shadow: 0 0 12px #bef264;
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.2); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      }
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      }
+
+      .text-stabilo {
+        color: #bef264;
+        text-shadow: 0 0 10px rgba(190, 242, 100, 0.5);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- LOGO POLRI TEMPLATE -->
+    <template id="polriLogo">
+      <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-2xl">
+        <path d="M10 15 Q10 5 50 5 Q90 5 90 15 L90 50 Q90 85 50 95 Q10 85 10 50 Z" fill="#111" stroke="#ff0000" stroke-width="1.5"/>
+        <path d="M50 5 Q10 5 10 15 L10 50 Q10 85 50 95 L50 5 Z" fill="#eab308"/>
+        <path d="M5 25 Q5 20 50 20 Q95 20 95 25 L95 38 Q95 33 50 33 Q5 33 5 38 Z" fill="#0000ff" stroke="#000" stroke-width="0.5"/>
+        <text x="50" y="29.5" font-family="Arial" font-weight="900" font-size="7.5" fill="white" text-anchor="middle" letter-spacing="0.5">KEPOLISIAN</text>
+        <text x="50" y="42" font-family="Arial" font-weight="900" font-size="6" fill="white" text-anchor="middle" stroke="black" stroke-width="0.3">HOPIXEL</text>
+        <polygon points="50,45 52,50 57,50 53,53 54,58 50,55 46,58 47,53 43,50 48,50" fill="#facc15"/>
+        <polygon points="40,51 42,55 46,55 43,57 44,61 40,59 36,61 37,57 34,55 38,55" fill="#facc15"/>
+        <polygon points="60,51 62,55 66,55 63,57 64,61 60,59 56,61 57,57 54,55 58,55" fill="#facc15"/>
+        <circle cx="50" cy="72" r="14" fill="#00008b" stroke="white" stroke-width="0.5"/>
+        <path d="M50 60 Q55 65 60 60 Q55 70 65 72 Q55 74 60 84 Q50 78 40 84 Q45 74 35 72 Q45 70 40 60 Q45 65 50 60" fill="white"/>
+        <rect x="48.5" y="72" width="3" height="8" fill="#facc15"/>
+        <path d="M50 64 Q54 68 50 72 Q46 68 50 64" fill="#ff4500"/>
+      </svg>
+    </template>
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="max-w-md w-full glass rounded-3xl shadow-2xl p-10 border-t-8 border-emerald-600">
+      <div class="text-center mb-10">
+        <div id="logoContainerLogin" class="w-36 h-36 mx-auto mb-6"></div>
+        <h1 class="text-3xl font-black uppercase tracking-tighter text-white">Database <span class="text-emerald-500">Hopixel</span></h1>
+        <p class="text-emerald-400 text-[10px] mt-2 font-bold uppercase tracking-[0.3em]">Divisi Kepolisian Negara</p>
+      </div>
+
+      <form id="loginForm" class="space-y-5">
+        <div>
+          <label class="block text-[10px] font-black text-emerald-300/50 uppercase mb-2 ml-1">Kredensial Akses</label>
+          <input type="text" id="userInput" placeholder="Username / Nama IC" class="w-full rounded-xl p-4 font-bold" required />
+        </div>
+        <div>
+          <input type="password" id="passInput" placeholder="Password Sistem" class="w-full rounded-xl p-4 font-bold" required />
+        </div>
+        <button type="submit" class="w-full btn-primary text-white font-black py-4 rounded-xl uppercase tracking-widest transition-all active:scale-95">
+          Otorisasi Masuk
+        </button>
+        <button type="button" onclick="showRegister()" class="w-full text-emerald-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">
+          Belum punya akses? Daftar Akun Baru
+        </button>
+      </form>
+    </div>
+
+    <!-- REGISTER PAGE -->
+    <div id="registerPage" class="max-w-md w-full glass rounded-3xl shadow-2xl p-10 border-t-8 border-blue-600 hidden">
+      <div class="text-center mb-10">
+        <h1 class="text-3xl font-black uppercase tracking-tighter text-white">Registrasi <span class="text-blue-500">Akses</span></h1>
+        <p class="text-blue-400 text-[10px] mt-2 font-bold uppercase tracking-[0.3em]">Permohonan Kredensial Baru</p>
+      </div>
+
+      <form id="registerForm" class="space-y-5">
+        <div>
+          <label class="block text-[10px] font-black text-blue-300/50 uppercase mb-2 ml-1">Nama Lengkap (IC)</label>
+          <input type="text" id="regName" placeholder="Contoh: Budi_Santoso" class="w-full rounded-xl p-4 font-bold" required />
+        </div>
+        <div>
+          <label class="block text-[10px] font-black text-blue-300/50 uppercase mb-2 ml-1">Username Yang Diinginkan</label>
+          <input type="text" id="regUser" placeholder="Contoh: budi_77" class="w-full rounded-xl p-4 font-bold" required />
+        </div>
+        <div>
+          <label class="block text-[10px] font-black text-blue-300/50 uppercase mb-2 ml-1">Pangkat Saat Ini</label>
+          <input type="text" id="regRank" placeholder="Contoh: Bripda" class="w-full rounded-xl p-4 font-bold" required />
+        </div>
+        <button type="submit" id="btnSubmitReg" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-all active:scale-95">
+          Ajukan Akses
+        </button>
+        <button type="button" onclick="showLogin()" class="w-full text-blue-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">
+          Kembali ke Login
+        </button>
+      </form>
+    </div>
+
+    <!-- DASHBOARD UTAMA -->
+    <div id="mainDashboard" class="max-w-3xl w-full glass rounded-3xl shadow-2xl overflow-hidden hidden border-t-8 border-emerald-600 transition-all duration-500">
+      
+      <!-- Top Bar -->
+      <div class="px-6 py-5 bg-emerald-950/40 flex items-center justify-between border-b border-emerald-900/50">
+        <div class="flex items-center gap-4">
+          <div id="logoContainerDash" class="w-14 h-14"></div>
+          <div>
+            <h2 class="text-sm font-black uppercase tracking-widest text-slate-100">Pusat Data <span class="text-emerald-400">Hopixel</span></h2>
+            <p class="text-[9px] text-emerald-500/70 font-bold uppercase tracking-widest">Sistem Personel Terpadu</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div id="userDisplay" class="text-[11px] font-black text-emerald-400 bg-emerald-400/5 px-4 py-2 rounded-lg border border-emerald-400/20 mb-1 uppercase"></div>
+          <div class="text-[9px] font-bold text-stabilo flex items-center justify-end gap-2">
+            <span class="dot-online"></span> ENCRYPTED SESSION
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex border-b border-emerald-900/50 bg-black/20">
+        <button onclick="switchTab('absen')" id="tabAbsen" class="flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-active">Presensi</button>
+        <button onclick="switchTab('izin')" id="tabIzin" class="flex-1 py-5 text-[11px] font-black uppercase tracking-widest text-emerald-700">Izin / Cuti</button>
+        <button onclick="switchTab('dpo')" id="tabDpo" class="flex-1 py-5 text-[11px] font-black uppercase tracking-widest text-emerald-700">DPO / Buron</button>
+      </div>
+
+      <!-- SECTION: PRESENSI -->
+      <div id="sectionAbsen" class="p-8">
+        <form id="attendanceForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Nama Personel</label>
+              <input type="text" id="nameAbsen" class="w-full rounded-xl p-4 font-bold text-emerald-400" readonly />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Pangkat</label>
+              <select id="rank" class="w-full rounded-xl p-4 font-bold" required>
+                <option value="" disabled selected>Pilih Pangkat</option>
+                <optgroup label="PERWIRA TINGGI" class="text-red-400">
+                  <option value="Jenderal">Jenderal Polisi</option>
+                  <option value="Komjen">Komjen Pol</option>
+                  <option value="Irjen">Irjen Pol</option>
+                  <option value="Brigjen">Brigjen Pol</option>
+                </optgroup>
+                <optgroup label="PERWIRA MENENGAH" class="text-emerald-400">
+                  <option value="Kombes">Kombes Pol</option>
+                  <option value="AKBP">AKBP</option>
+                  <option value="Kompol">Kompol</option>
+                </optgroup>
+                <optgroup label="PERWIRA PERTAMA" class="text-emerald-300">
+                  <option value="AKP">AKP</option>
+                  <option value="Iptu">Iptu</option>
+                  <option value="Ipda">Ipda</option>
+                </optgroup>
+                <optgroup label="BINTARA" class="text-yellow-400">
+                  <option value="Aiptu">Aiptu</option>
+                  <option value="Aipda">Aipda</option>
+                  <option value="Bripka">Bripka</option>
+                  <option value="Brigadir">Brigadir</option>
+                  <option value="Briptu">Briptu</option>
+                  <option value="Bripda">Bripda</option>
+                </optgroup>
+                <optgroup label="TAMTAMA" class="text-slate-300">
+                  <option value="Abrip">Abrip</option>
+                  <option value="Abriptu">Abriptu</option>
+                  <option value="Abripda">Abripda</option>
+                  <option value="Bharaka">Bharaka</option>
+                  <option value="Bharatu">Bharatu</option>
+                  <option value="Bharada">Bharada</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kesatuan</label>
+              <select id="unit" class="w-full rounded-xl p-4 font-bold" required>
+                <option value="" disabled selected>Pilih Kesatuan</option>
+                <option value="PETINGGI">🌟 PETINGGI (MABES)</option>
+                <option value="BRIMOB">KORPS BRIMOB</option>
+                <option value="SABHARA">SABHARA</option>
+                <option value="PROPAM">PROPAM</option>
+                <option value="LANTAS">LANTAS</option>
+                <option value="RESERSE">RESERSE</option>
+                <option value="INTELKAM">INTELKAM</option>
+                <option value="POLAIRUD">POLAIRUD</option>
+                <option value="DOKKES">DOKKES (MEDIS)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Waktu Mulai</label>
+              <input type="time" id="dutyTime" class="w-full rounded-xl p-4 font-bold" required />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kegiatan / Patroli</label>
+            <textarea id="notes" rows="3" placeholder="Contoh: Patroli rutin Square & Central..." class="w-full rounded-xl p-4" required></textarea>
+          </div>
+
+          <div class="space-y-4">
+            <label class="block text-[10px] font-black text-emerald-500/70 uppercase tracking-widest text-center">Lampiran Dokumentasi</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input type="file" id="photo1" class="text-[9px] bg-emerald-950/50 p-2 rounded-lg border border-emerald-900/50 w-full" required />
+              <input type="file" id="photo2" class="text-[9px] bg-emerald-950/50 p-2 rounded-lg border border-emerald-900/50 w-full" />
+              <input type="file" id="photo3" class="text-[9px] bg-emerald-950/50 p-2 rounded-lg border border-emerald-900/50 w-full" />
+            </div>
+          </div>
+
+          <button type="submit" id="submitAbsen" class="w-full btn-primary py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all active:scale-[0.98]">
+            Kirim Laporan Ke Pusat Data
+          </button>
+        </form>
+      </div>
+
+      <!-- SECTION: IZIN / CUTI -->
+      <div id="sectionIzin" class="p-8 hidden">
+        <form id="izinForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Pemohon</label>
+              <input type="text" id="nameIzin" class="w-full rounded-xl p-4 font-bold text-yellow-400" readonly />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Jenis Izin</label>
+              <select id="izinType" class="w-full rounded-xl p-4 font-bold" required>
+                <option value="IZIN / OFF DUTY">IZIN / OFF DUTY</option>
+                <option value="CUTI TAHUNAN">CUTI TAHUNAN</option>
+                <option value="SAKIT">SAKIT</option>
+                <option value="DINAS LUAR (DL)">DINAS LUAR (DL)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Tanggal Mulai</label>
+              <input type="datetime-local" id="izinStart" class="w-full rounded-xl p-4 font-bold" required />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Estimasi Selesai</label>
+              <input type="datetime-local" id="izinEnd" class="w-full rounded-xl p-4 font-bold" required />
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Alasan</label>
+            <textarea id="izinNotes" rows="3" placeholder="Berikan alasan yang jelas..." class="w-full rounded-xl p-4" required></textarea>
+          </div>
+          <button type="submit" id="submitIzin" class="w-full bg-yellow-600/80 py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-yellow-900/40 hover:bg-yellow-500 transition-all active:scale-[0.98]">
+            Ajukan Permohonan
+          </button>
+        </form>
+      </div>
+
+      <!-- SECTION: DPO -->
+      <div id="sectionDpo" class="p-8 hidden">
+        <div class="bg-red-600/10 border border-red-600/30 rounded-2xl p-4 mb-8 flex items-center gap-4">
+          <div class="text-red-500 w-8 h-8">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          </div>
+          <div>
+            <h4 class="text-[11px] font-black text-red-500 uppercase tracking-widest">Red Notice / DPO</h4>
+            <p class="text-[9px] text-emerald-500/60 font-bold uppercase">Dokumen pengejaran target secara luas</p>
+          </div>
+        </div>
+
+        <form id="dpoForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Nama Target</label>
+              <input type="text" id="dpoName" placeholder="Nama_Lengkap" class="w-full rounded-xl p-4 font-bold" required />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Tingkat Bahaya</label>
+              <select id="dpoLevel" class="w-full rounded-xl p-4 font-black">
+                <option value="TINGGI">🔴 TINGGI (SENPI/KAMPES)</option>
+                <option value="SEDANG">🟠 SEDANG (SAJAM)</option>
+                <option value="RENDAH">🟡 RENDAH (PENIPUAN/LALIN)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Ciri Fisik</label>
+              <input type="text" id="dpoFeatures" placeholder="Contoh: Jaket Hijau, Rambut Pirang" class="w-full rounded-xl p-4" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kendaraan</label>
+              <input type="text" id="dpoVehicle" placeholder="Contoh: Sultan Putih (HP-999)" class="w-full rounded-xl p-4" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kronologi Kejadian</label>
+            <textarea id="dpoCrime" rows="3" placeholder="Sebutkan pelanggaran yang dilakukan..." class="w-full rounded-xl p-4"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Foto (Opsional)</label>
+              <input type="file" id="dpoPhoto" class="text-[9px] bg-emerald-950/50 p-3 rounded-xl border border-emerald-900/50 w-full" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Petugas Penindak</label>
+              <input type="text" id="dpoReporter" class="w-full rounded-xl p-4 bg-black/40 font-bold text-emerald-400" readonly />
+            </div>
+          </div>
+
+          <button type="submit" id="submitDpo" class="w-full bg-red-700/80 py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-red-950/40 hover:bg-red-600 transition-all active:scale-[0.98]">
+            Terbitkan Red Notice
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // WEBHOOKS
+      const WEBHOOK_DUTY = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-";
+      const WEBHOOK_IZIN = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-";
+      const WEBHOOK_DPO = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-";
+      const WEBHOOK_REG = "https://discord.com/api/webhooks/1490798619350143238/zcyiqxYISYhY3N-f2IMIcUjfimHKcNc5_mIeTki4sK9BYbtnVmVTiFCSQDvHE8-QMZ8p"; // Ganti dengan webhook khusus pendaftaran jika ingin dipisah
+      
+      // DATABASE USERS (Update manual di sini)
+      const USERS = {
+        admin: "123",
+        marcel_polisi: "hopixel77",
+        sasajj: "lengkap",
+        kapolri: "hopixel1"
+      };
+
+      function renderLogos() {
+        const template = document.getElementById('polriLogo');
+        const containers = ['logoContainerLogin', 'logoContainerDash'];
+        containers.forEach(id => {
+          const el = document.getElementById(id);
+          if(el) {
+            el.innerHTML = "";
+            el.appendChild(template.content.cloneNode(true));
+          }
+        });
+      }
+
+      window.addEventListener('load', renderLogos);
+
+      function showRegister() {
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('registerPage').classList.remove('hidden');
+      }
+
+      function showLogin() {
+        document.getElementById('registerPage').classList.add('hidden');
+        document.getElementById('loginPage').classList.remove('hidden');
+        renderLogos();
+      }
+
+      function switchTab(type) {
+        const sections = {
+          absen: document.getElementById('sectionAbsen'),
+          izin: document.getElementById('sectionIzin'),
+          dpo: document.getElementById('sectionDpo')
+        };
+        const tabs = {
+          absen: document.getElementById('tabAbsen'),
+          izin: document.getElementById('tabIzin'),
+          dpo: document.getElementById('tabDpo')
+        };
+        const dash = document.getElementById('mainDashboard');
+
+        Object.values(sections).forEach(s => s.classList.add('hidden'));
+        Object.values(tabs).forEach(t => t.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest text-emerald-700");
+
+        sections[type].classList.remove('hidden');
+        
+        if(type === 'absen') {
+          tabs.absen.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-active";
+          dash.style.borderColor = "#059669";
+        } else if(type === 'izin') {
+          tabs.izin.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-izin-active";
+          dash.style.borderColor = "#facc15";
+        } else {
+          tabs.dpo.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-dpo-active";
+          dash.style.borderColor = "#b91c1c";
+        }
+        renderLogos();
+      }
+
+      // Handle Registrasi
+      document.getElementById("registerForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById("btnSubmitReg");
+        btn.disabled = true; btn.innerText = "MENGIRIM...";
+
+        const payload = {
+          content: "🆕 **PERMOHONAN AKSES DATABASE BARU**",
+          embeds: [{
+            title: "DATA CALON PERSONEL",
+            color: 3447003,
+            fields: [
+              { name: "👤 Nama IC", value: document.getElementById("regName").value, inline: true },
+              { name: "🔑 Username", value: document.getElementById("regUser").value, inline: true },
+              { name: "🎖️ Pangkat", value: document.getElementById("regRank").value, inline: true }
+            ],
+            footer: { text: "Harap Admin segera memproses di script utama" },
+            timestamp: new Date()
+          }]
+        };
+
+        try {
+          const res = await fetch(WEBHOOK_REG, { 
+            method: "POST", 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload) 
+          });
+          if(res.ok) { 
+            alert("Permohonan dikirim! Tunggu Admin menyetujui akses Anda."); 
+            showLogin();
+          }
+        } catch(err) { alert("Gagal mengirim permohonan!"); }
+        btn.disabled = false; btn.innerText = "AJUKAN AKSES";
+      });
+
+      // Handle Login
+      document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const u = document.getElementById("userInput").value;
+        const p = document.getElementById("passInput").value;
+
+        if (USERS[u] === p) {
+          document.getElementById("loginPage").classList.add("hidden");
+          document.getElementById("mainDashboard").classList.remove("hidden");
+          document.getElementById("userDisplay").innerText = "PERSONEL: " + u.toUpperCase();
+          document.getElementById("nameAbsen").value = u;
+          document.getElementById("nameIzin").value = u;
+          document.getElementById("dpoReporter").value = u;
+          renderLogos();
+        } else {
+          alert("Kredensial Salah atau Akun Belum Terdaftar!");
+        }
+      });
+
+      // Laporan Presensi
+      document.getElementById("attendanceForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById("submitAbsen");
+        const files = [
+          document.getElementById("photo1").files[0],
+          document.getElementById("photo2").files[0],
+          document.getElementById("photo3").files[0]
+        ].filter(f => f);
+        
+        btn.disabled = true; btn.innerText = "MENGIRIM...";
+        const formData = new FormData();
+        files.forEach((file, index) => { formData.append(`file${index}`, file); });
+
+        const payload = {
+          content: "✅ **HOPIXEL POLICE: ON DUTY REPORT**",
+          embeds: [{
+            title: "KONFIRMASI PRESENSI PERSONEL",
+            color: 661445,
+            fields: [
+              { name: "👤 Nama", value: document.getElementById("nameAbsen").value, inline: true },
+              { name: "🎖️ Pangkat", value: document.getElementById("rank").value, inline: true },
+              { name: "🛡️ Kesatuan", value: document.getElementById("unit").value, inline: true },
+              { name: "⏰ Jam Mulai", value: document.getElementById("dutyTime").value, inline: true },
+              { name: "📝 Kegiatan", value: document.getElementById("notes").value || "-" }
+            ],
+            timestamp: new Date()
+          }]
+        };
+
+        if(files.length > 0) payload.embeds[0].image = { url: "attachment://" + files[0].name };
+        formData.append("payload_json", JSON.stringify(payload));
+
+        try {
+          const res = await fetch(WEBHOOK_DUTY, { method: "POST", body: formData });
+          if(res.ok) { alert("Presensi Terkirim!"); location.reload(); }
+        } catch(err) { alert("Terjadi Kesalahan!"); }
+        btn.disabled = false;
+      });
+
+      // Permohonan Izin
+      document.getElementById("izinForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById("submitIzin");
+        btn.disabled = true; btn.innerText = "MENGIRIM...";
+
+        const payload = {
+          content: "⚠️ **HOPIXEL POLICE: LEAVE REQUEST**",
+          embeds: [{
+            title: "PENGAJUAN IZIN PERSONEL",
+            color: 16766976,
+            fields: [
+              { name: "👤 Personel", value: document.getElementById("nameIzin").value, inline: true },
+              { name: "🚥 Jenis", value: document.getElementById("izinType").value, inline: true },
+              { name: "📅 Dari", value: document.getElementById("izinStart").value.replace('T', ' '), inline: true },
+              { name: "📅 Hingga", value: document.getElementById("izinEnd").value.replace('T', ' '), inline: true },
+              { name: "📝 Alasan", value: document.getElementById("izinNotes").value }
+            ],
+            timestamp: new Date()
+          }]
+        };
+
+        try {
+          const res = await fetch(WEBHOOK_IZIN, { 
+            method: "POST", 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload) 
+          });
+          if(res.ok) { alert("Izin Berhasil Diajukan!"); }
+        } catch(err) { alert("Gagal!"); }
+        btn.disabled = false;
+      });
+
+      // Laporan DPO
+      document.getElementById("dpoForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById("submitDpo");
+        const f = document.getElementById("dpoPhoto").files[0];
+        btn.disabled = true; btn.innerText = "MENERBITKAN...";
+
+        const formData = new FormData();
+        if(f) formData.append("file", f);
+
+        const payload = {
+          content: "@everyone **🚨 RED NOTICE: HOPIXEL DPO 🚨**",
+          embeds: [{
+            title: "TARGET BURON: " + document.getElementById("dpoName").value.toUpperCase(),
+            color: 15158332,
+            fields: [
+              { name: "⚠️ Ancaman", value: document.getElementById("dpoLevel").value, inline: true },
+              { name: "👮 Pelapor", value: document.getElementById("dpoReporter").value, inline: true },
+              { name: "👤 Ciri Fisik", value: document.getElementById("dpoFeatures").value || "-", inline: true },
+              { name: "🚗 Kendaraan", value: document.getElementById("dpoVehicle").value || "-", inline: true },
+              { name: "⚖️ Kasus", value: document.getElementById("dpoCrime").value || "-" }
+            ],
+            timestamp: new Date()
+          }]
+        };
+
+        if(f) payload.embeds[0].image = { url: "attachment://" + f.name };
+        formData.append("payload_json", JSON.stringify(payload));
+
+        try {
+          const res = await fetch(WEBHOOK_DPO, { method: "POST", body: formData });
+          if(res.ok) { alert("Red Notice Berhasil Diterbitkan!"); }
+        } catch(err) { alert("Gagal!"); }
+        btn.disabled = false;
+      });
+    </script>
+  </body>
+</html>

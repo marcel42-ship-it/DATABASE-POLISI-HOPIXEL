@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistem Personel Polri | Hopixel RP</title>
     
-    <!-- TAMBAHAN: Logo di Tab Browser (Favicon) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M10 15 Q10 5 50 5 Q90 5 90 15 L90 50 Q90 85 50 95 Q10 85 10 50 Z' fill='%23eab308' stroke='%23ff0000' stroke-width='2'/><circle cx='50' cy='72' r='14' fill='%2300008b'/></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,7 +22,7 @@
         backdrop-filter: blur(20px);
         border: 1px solid rgba(16, 185, 129, 0.2);
       }
-      .hidden { display: none; }
+      .hidden { display: none !important; }
       input, select, textarea {
         background: #061f1a !important;
         border: 1px solid #065f46 !important;
@@ -123,6 +123,10 @@
         <div>
           <label class="block text-[10px] font-black text-blue-300/50 uppercase mb-2 ml-1">Username Yang Diinginkan</label>
           <input type="text" id="regUser" placeholder="Contoh: budi_77" class="w-full rounded-xl p-4 font-bold" required />
+        </div>
+        <div>
+          <label class="block text-[10px] font-black text-blue-300/50 uppercase mb-2 ml-1 text-yellow-400">Buat Password Anda</label>
+          <input type="password" id="regPass" placeholder="Minimal 6 Karakter" class="w-full rounded-xl p-4 font-bold" required />
         </div>
         <div>
           <label class="block text-[10px] font-black text-blue-300/50 uppercase mb-2 ml-1">Pangkat Saat Ini</label>
@@ -254,7 +258,7 @@
         </form>
       </div>
 
-      <!-- SECTION: IZIN / CUTI -->
+      <!-- SECTION: IZIN -->
       <div id="sectionIzin" class="p-8 hidden">
         <form id="izinForm" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -286,7 +290,7 @@
             <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Alasan</label>
             <textarea id="izinNotes" rows="3" placeholder="Berikan alasan yang jelas..." class="w-full rounded-xl p-4" required></textarea>
           </div>
-          <button type="submit" id="submitIzin" class="w-full bg-yellow-600/80 py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-yellow-900/40 hover:bg-yellow-500 transition-all active:scale-[0.98]">
+          <button type="submit" id="submitIzin" class="w-full bg-yellow-600/80 py-5 rounded-2xl font-black uppercase text-xs tracking-widest text-white shadow-xl hover:bg-yellow-500">
             Ajukan Permohonan
           </button>
         </form>
@@ -294,16 +298,6 @@
 
       <!-- SECTION: DPO -->
       <div id="sectionDpo" class="p-8 hidden">
-        <div class="bg-red-600/10 border border-red-600/30 rounded-2xl p-4 mb-8 flex items-center gap-4">
-          <div class="text-red-500 w-8 h-8">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-          </div>
-          <div>
-            <h4 class="text-[11px] font-black text-red-500 uppercase tracking-widest">Red Notice / DPO</h4>
-            <p class="text-[9px] text-emerald-500/60 font-bold uppercase">Dokumen pengejaran target secara luas</p>
-          </div>
-        </div>
-
         <form id="dpoForm" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -319,23 +313,20 @@
               </select>
             </div>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Ciri Fisik</label>
-              <input type="text" id="dpoFeatures" placeholder="Contoh: Jaket Hijau, Rambut Pirang" class="w-full rounded-xl p-4" />
+              <input type="text" id="dpoFeatures" placeholder="Contoh: Jaket Hijau" class="w-full rounded-xl p-4" />
             </div>
             <div>
               <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kendaraan</label>
-              <input type="text" id="dpoVehicle" placeholder="Contoh: Sultan Putih (HP-999)" class="w-full rounded-xl p-4" />
+              <input type="text" id="dpoVehicle" placeholder="Contoh: Sultan Putih" class="w-full rounded-xl p-4" />
             </div>
           </div>
-
           <div>
-            <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kronologi Kejadian</label>
-            <textarea id="dpoCrime" rows="3" placeholder="Sebutkan pelanggaran yang dilakukan..." class="w-full rounded-xl p-4"></textarea>
+            <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Kronologi</label>
+            <textarea id="dpoCrime" rows="3" class="w-full rounded-xl p-4" required></textarea>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block text-[10px] font-black text-emerald-500/70 uppercase mb-2 tracking-widest">Foto (Opsional)</label>
@@ -346,8 +337,7 @@
               <input type="text" id="dpoReporter" class="w-full rounded-xl p-4 bg-black/40 font-bold text-emerald-400" readonly />
             </div>
           </div>
-
-          <button type="submit" id="submitDpo" class="w-full bg-red-700/80 py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-red-950/40 hover:bg-red-600 transition-all active:scale-[0.98]">
+          <button type="submit" id="submitDpo" class="w-full bg-red-700/80 py-5 rounded-2xl font-black uppercase text-xs tracking-widest text-white">
             Terbitkan Red Notice
           </button>
         </form>
@@ -359,8 +349,8 @@
       const WEBHOOK_DUTY = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-";
       const WEBHOOK_IZIN = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-";
       const WEBHOOK_DPO = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-";
-      const WEBHOOK_REG = "https://discord.com/api/webhooks/1490798619350143238/zcyiqxYISYhY3N-f2IMIcUjfimHKcNc5_mIeTki4sK9BYbtnVmVTiFCSQDvHE8-QMZ8p"; 
-      
+      const WEBHOOK_REG = "https://discord.com/api/webhooks/1490778582023405659/_J89Kpx3JwPEotJ1inUr4pQBbyJfR1FQSOMaVEBnoxX9Gag8Y_3B0Zmv03KWbaNcj0d-"; 
+
       // DATABASE USERS (Update manual di sini)
       const USERS = {
         admin: "123",
@@ -371,23 +361,17 @@
 
       function renderLogos() {
         const template = document.getElementById('polriLogo');
-        const containers = ['logoContainerLogin', 'logoContainerDash'];
-        containers.forEach(id => {
+        ['logoContainerLogin', 'logoContainerDash'].forEach(id => {
           const el = document.getElementById(id);
-          if(el) {
-            el.innerHTML = "";
-            el.appendChild(template.content.cloneNode(true));
-          }
+          if(el) { el.innerHTML = ""; el.appendChild(template.content.cloneNode(true)); }
         });
       }
-
-      window.addEventListener('load', renderLogos);
+      window.onload = renderLogos;
 
       function showRegister() {
         document.getElementById('loginPage').classList.add('hidden');
         document.getElementById('registerPage').classList.remove('hidden');
       }
-
       function showLogin() {
         document.getElementById('registerPage').classList.add('hidden');
         document.getElementById('loginPage').classList.remove('hidden');
@@ -395,40 +379,48 @@
       }
 
       function switchTab(type) {
-        const sections = {
-          absen: document.getElementById('sectionAbsen'),
-          izin: document.getElementById('sectionIzin'),
-          dpo: document.getElementById('sectionDpo')
-        };
-        const tabs = {
-          absen: document.getElementById('tabAbsen'),
-          izin: document.getElementById('tabIzin'),
-          dpo: document.getElementById('tabDpo')
-        };
+        const sects = { absen: 'sectionAbsen', izin: 'sectionIzin', dpo: 'sectionDpo' };
+        const tabs = { absen: 'tabAbsen', izin: 'tabIzin', dpo: 'tabDpo' };
         const dash = document.getElementById('mainDashboard');
 
-        Object.values(sections).forEach(s => s.classList.add('hidden'));
-        Object.values(tabs).forEach(t => t.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest text-emerald-700");
+        Object.values(sects).forEach(s => document.getElementById(s).classList.add('hidden'));
+        Object.values(tabs).forEach(t => document.getElementById(t).className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest text-emerald-700");
 
-        sections[type].classList.remove('hidden');
+        document.getElementById(sects[type]).classList.remove('hidden');
         
         if(type === 'absen') {
-          tabs.absen.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-active";
+          document.getElementById('tabAbsen').classList.add('tab-active');
           dash.style.borderColor = "#059669";
         } else if(type === 'izin') {
-          tabs.izin.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-izin-active";
+          document.getElementById('tabIzin').classList.add('tab-izin-active');
           dash.style.borderColor = "#facc15";
         } else {
-          tabs.dpo.className = "flex-1 py-5 text-[11px] font-black uppercase tracking-widest tab-dpo-active";
+          document.getElementById('tabDpo').classList.add('tab-dpo-active');
           dash.style.borderColor = "#b91c1c";
         }
         renderLogos();
       }
 
-      // Handle Registrasi
-      document.getElementById("registerForm").addEventListener("submit", async function(e) {
+      // LOGIN
+      document.getElementById('loginForm').onsubmit = (e) => {
         e.preventDefault();
-        const btn = document.getElementById("btnSubmitReg");
+        const u = document.getElementById('userInput').value;
+        const p = document.getElementById('passInput').value;
+        if(USERS[u] === p) {
+          document.getElementById('loginPage').classList.add('hidden');
+          document.getElementById('mainDashboard').classList.remove('hidden');
+          document.getElementById('userDisplay').innerText = "PERSONEL: " + u.toUpperCase();
+          document.getElementById('nameAbsen').value = u;
+          document.getElementById('nameIzin').value = u;
+          document.getElementById('dpoReporter').value = u;
+          renderLogos();
+        } else { alert('Kredensial Salah!'); }
+      };
+
+      // REGISTER (DENGAN PASSWORD)
+      document.getElementById('registerForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmitReg');
         btn.disabled = true; btn.innerText = "MENGIRIM...";
 
         const payload = {
@@ -439,71 +431,47 @@
             fields: [
               { name: "👤 Nama IC", value: document.getElementById("regName").value, inline: true },
               { name: "🔑 Username", value: document.getElementById("regUser").value, inline: true },
+              { name: "🛡️ Password Pilihan", value: document.getElementById("regPass").value, inline: true },
               { name: "🎖️ Pangkat", value: document.getElementById("regRank").value, inline: true }
             ],
-            footer: { text: "Harap Admin segera memproses di script utama" },
+            footer: { text: "Segera tambahkan user ini ke script jika disetujui" },
             timestamp: new Date()
           }]
         };
 
         try {
-          const res = await fetch(WEBHOOK_REG, { 
-            method: "POST", 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload) 
-          });
-          if(res.ok) { 
-            alert("Permohonan dikirim! Tunggu Admin menyetujui akses Anda."); 
-            showLogin();
-          }
-        } catch(err) { alert("Gagal mengirim permohonan!"); }
+          await fetch(WEBHOOK_REG, { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+          alert('Permohonan Terkirim! Hubungi Admin untuk Aktivasi.');
+          showLogin();
+        } catch { alert('Gagal!'); }
         btn.disabled = false; btn.innerText = "AJUKAN AKSES";
-      });
+      };
 
-      // Handle Login
-      document.getElementById("loginForm").addEventListener("submit", function(e) {
+      // ABSEN (DENGAN FOTO)
+      document.getElementById('attendanceForm').onsubmit = async (e) => {
         e.preventDefault();
-        const u = document.getElementById("userInput").value;
-        const p = document.getElementById("passInput").value;
+        const btn = document.getElementById('submitAbsen');
+        btn.disabled = true; btn.innerText = "MENGIRIM...";
 
-        if (USERS[u] === p) {
-          document.getElementById("loginPage").classList.add("hidden");
-          document.getElementById("mainDashboard").classList.remove("hidden");
-          document.getElementById("userDisplay").innerText = "PERSONEL: " + u.toUpperCase();
-          document.getElementById("nameAbsen").value = u;
-          document.getElementById("nameIzin").value = u;
-          document.getElementById("dpoReporter").value = u;
-          renderLogos();
-        } else {
-          alert("Kredensial Salah atau Akun Belum Terdaftar!");
-        }
-      });
-
-      // Laporan Presensi
-      document.getElementById("attendanceForm").addEventListener("submit", async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById("submitAbsen");
         const files = [
           document.getElementById("photo1").files[0],
           document.getElementById("photo2").files[0],
           document.getElementById("photo3").files[0]
         ].filter(f => f);
-        
-        btn.disabled = true; btn.innerText = "MENGIRIM...";
+
         const formData = new FormData();
-        files.forEach((file, index) => { formData.append(`file${index}`, file); });
+        files.forEach((f, i) => formData.append(`file${i}`, f));
 
         const payload = {
           content: "✅ **HOPIXEL POLICE: ON DUTY REPORT**",
           embeds: [{
-            title: "KONFIRMASI PRESENSI PERSONEL",
             color: 661445,
             fields: [
-              { name: "👤 Nama", value: document.getElementById("nameAbsen").value, inline: true },
-              { name: "🎖️ Pangkat", value: document.getElementById("rank").value, inline: true },
-              { name: "🛡️ Kesatuan", value: document.getElementById("unit").value, inline: true },
-              { name: "⏰ Jam Mulai", value: document.getElementById("dutyTime").value, inline: true },
-              { name: "📝 Kegiatan", value: document.getElementById("notes").value || "-" }
+              { name: "Nama", value: document.getElementById('nameAbsen').value, inline: true },
+              { name: "Pangkat", value: document.getElementById('rank').value, inline: true },
+              { name: "Kesatuan", value: document.getElementById('unit').value, inline: true },
+              { name: "Mulai", value: document.getElementById('dutyTime').value, inline: true },
+              { name: "Kegiatan", value: document.getElementById('notes').value }
             ],
             timestamp: new Date()
           }]
@@ -513,80 +481,58 @@
         formData.append("payload_json", JSON.stringify(payload));
 
         try {
-          const res = await fetch(WEBHOOK_DUTY, { method: "POST", body: formData });
-          if(res.ok) { alert("Presensi Terkirim!"); location.reload(); }
-        } catch(err) { alert("Terjadi Kesalahan!"); }
+          await fetch(WEBHOOK_DUTY, { method: "POST", body: formData });
+          alert('Presensi Berhasil!');
+          location.reload();
+        } catch { alert('Gagal!'); }
         btn.disabled = false;
-      });
+      };
 
-      // Permohonan Izin
-      document.getElementById("izinForm").addEventListener("submit", async function(e) {
+      // IZIN
+      document.getElementById('izinForm').onsubmit = async (e) => {
         e.preventDefault();
-        const btn = document.getElementById("submitIzin");
-        btn.disabled = true; btn.innerText = "MENGIRIM...";
-
         const payload = {
           content: "⚠️ **HOPIXEL POLICE: LEAVE REQUEST**",
           embeds: [{
-            title: "PENGAJUAN IZIN PERSONEL",
             color: 16766976,
             fields: [
-              { name: "👤 Personel", value: document.getElementById("nameIzin").value, inline: true },
-              { name: "🚥 Jenis", value: document.getElementById("izinType").value, inline: true },
-              { name: "📅 Dari", value: document.getElementById("izinStart").value.replace('T', ' '), inline: true },
-              { name: "📅 Hingga", value: document.getElementById("izinEnd").value.replace('T', ' '), inline: true },
-              { name: "📝 Alasan", value: document.getElementById("izinNotes").value }
+              { name: "Personel", value: document.getElementById('nameIzin').value },
+              { name: "Jenis", value: document.getElementById('izinType').value },
+              { name: "Durasi", value: `${document.getElementById('izinStart').value} s/d ${document.getElementById('izinEnd').value}` },
+              { name: "Alasan", value: document.getElementById('izinNotes').value }
             ],
             timestamp: new Date()
           }]
         };
+        await fetch(WEBHOOK_IZIN, { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        alert('Izin Diajukan!');
+      };
 
-        try {
-          const res = await fetch(WEBHOOK_IZIN, { 
-            method: "POST", 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload) 
-          });
-          if(res.ok) { alert("Izin Berhasil Diajukan!"); }
-        } catch(err) { alert("Gagal!"); }
-        btn.disabled = false;
-      });
-
-      // Laporan DPO
-      document.getElementById("dpoForm").addEventListener("submit", async function(e) {
+      // DPO
+      document.getElementById('dpoForm').onsubmit = async (e) => {
         e.preventDefault();
-        const btn = document.getElementById("submitDpo");
         const f = document.getElementById("dpoPhoto").files[0];
-        btn.disabled = true; btn.innerText = "MENERBITKAN...";
-
         const formData = new FormData();
         if(f) formData.append("file", f);
 
         const payload = {
           content: "@everyone **🚨 RED NOTICE: HOPIXEL DPO 🚨**",
           embeds: [{
-            title: "TARGET BURON: " + document.getElementById("dpoName").value.toUpperCase(),
+            title: "TARGET: " + document.getElementById("dpoName").value.toUpperCase(),
             color: 15158332,
             fields: [
-              { name: "⚠️ Ancaman", value: document.getElementById("dpoLevel").value, inline: true },
-              { name: "👮 Pelapor", value: document.getElementById("dpoReporter").value, inline: true },
-              { name: "👤 Ciri Fisik", value: document.getElementById("dpoFeatures").value || "-", inline: true },
-              { name: "🚗 Kendaraan", value: document.getElementById("dpoVehicle").value || "-", inline: true },
-              { name: "⚖️ Kasus", value: document.getElementById("dpoCrime").value || "-" }
+              { name: "⚠️ Bahaya", value: document.getElementById("dpoLevel").value, inline: true },
+              { name: "Ciri", value: document.getElementById("dpoFeatures").value || "-", inline: true },
+              { name: "Kasus", value: document.getElementById("dpoCrime").value }
             ],
             timestamp: new Date()
           }]
         };
-
         if(f) payload.embeds[0].image = { url: "attachment://" + f.name };
         formData.append("payload_json", JSON.stringify(payload));
-
-        try {
-          const res = await fetch(WEBHOOK_DPO, { method: "POST", body: formData });
-          if(res.ok) { alert("Red Notice Berhasil Diterbitkan!"); }
-        } catch(err) { alert("Gagal!"); }
-        btn.disabled = false;
-      });
+        await fetch(WEBHOOK_DPO, { method: "POST", body: formData });
+        alert('DPO Diterbitkan!');
+      };
     </script>
   </body>
-</html>
+                </html>
